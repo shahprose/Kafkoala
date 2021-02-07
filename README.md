@@ -1,2 +1,3 @@
 # Kafkoala
-Playground for Testing Kafka Cluster Metrics
+
+🐨 Playground for Testing Kafka Cluster Metrics 🐨
