@@ -1,8 +1,9 @@
-const { Kafka } = require('kafkajs');
+const { Kafka, logLevel } = require('kafkajs');
 
 const kafka = new Kafka({
   clientId: 'kafka-specks',
   brokers: ['localhost:9092'],
+  loglevel: logLevel.INFO,
 });
 
 const admin = kafka.admin();
@@ -18,6 +19,7 @@ const administrate = async () => {
   // In a Kafka cluster, one of the brokers serves as the controller, which is responsible for managing the states of partitions and replicas and for performing administrative tasks like reassigning partitions.
   const clusterData = await admin.describeCluster();
   console.log('clusterData ===>', clusterData);
+  \;
 
   // DELETE TOPIC
   // await admin.deleteTopics({
@@ -79,6 +81,10 @@ const administrate = async () => {
     'this is topic metadata for a single topic ===>',
     JSON.stringify(metaData)
   );
+
+  const offsetData = await admin.fetchTopicOffsets('test-payloads');
+
+  console.log('offsetData ==> ', offsetData);
 
   // GET GROUPIDS
   // gets us the consumer groups
