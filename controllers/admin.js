@@ -2,7 +2,7 @@ const { Kafka, logLevel } = require('kafkajs');
 
 const kafka = new Kafka({
   clientId: 'kafka-specks',
-  brokers: ['localhost:9092'],
+  brokers: ['localhost:9092', 'localhost:9093', 'localhost:9094'],
   loglevel: logLevel.INFO,
 });
 
@@ -19,16 +19,10 @@ const administrate = async () => {
   // In a Kafka cluster, one of the brokers serves as the controller, which is responsible for managing the states of partitions and replicas and for performing administrative tasks like reassigning partitions.
   const clusterData = await admin.describeCluster();
   console.log('clusterData ===>', clusterData);
-  \;
 
   // DELETE TOPIC
   // await admin.deleteTopics({
-  //   topics: [
-  //     'TRUCK_ENGINE_SENSORS',
-  //     'TRUCK_3_SENSORS',
-  //     'TRUCK_2_SENSORS',
-  //     'TRUCK_1_SENSORS',
-  //   ],
+  //   topics: ['financial-sells', 'financial-buys'],
   //   timeout: 1000,
   // });
 
@@ -69,35 +63,59 @@ const administrate = async () => {
   // });
 
   // GET METADATA - CAN SHOW PARTITION ID, POINT TO THE LEADER PARTITION, NUMBER OF PARTITIONS per TOPIC, and REPLICAS
-  const metaData = await admin.fetchTopicMetadata({
-    topics: ['TRUCK_ENGINE_SENSORS'],
+  const topicDataFinancialSells = await admin.fetchTopicMetadata({
+    topics: ['financial_sells'],
   });
-  // for (let i = 0; i < metaData.topics.length; i++) {
-  //   if (metaData.topics[i].name !== '__consumer_offsets') {
-  //     console.log(`${metaData.topics[i].name}`, metaData.topics[i].partitions);
-  //   }
-  // }
+
+  const topicDataFinancialBuys = await admin.fetchTopicMetadata({
+    topics: ['financial_buys'],
+  });
+
+  const topicDataDoge = await admin.fetchTopicMetadata({
+    topics: ['dogecoin-price'],
+  });
+
+  const topicDataGme = await admin.fetchTopicMetadata({
+    topics: ['gme-price'],
+  });
+
+  for (let i = 0; i < topicDataFinancialSells.topics.length; i++) {
+    if (topicDataFinancialSells.topics[i].name !== '__consumer_offsets') {
+      console.log(
+        `${topicDataFinancialSells.topics[i].name}`,
+        topicDataFinancialSells.topics[i].partitions
+      );
+    }
+  }
+
   console.log(
     'this is topic metadata for a single topic ===>',
-    JSON.stringify(metaData)
+    JSON.stringify(topicDataFinancialSells)
   );
 
-  const offsetData = await admin.fetchTopicOffsets('test-payloads');
+  const offsetDataFinancialSells = await admin.fetchTopicOffsets(
+    'financial_sells'
+  );
 
-  console.log('offsetData ==> ', offsetData);
+  const offsetDataFinancialBuys = await admin.fetchTopicOffsets(
+    'financial_buys'
+  );
+
+  console.log('financial_sells ==> ', offsetDataFinancialSells);
+  console.log('financial_buys ==> ', offsetDataFinancialBuys);
 
   // GET GROUPIDS
   // gets us the consumer groups
-  const groups = await admin.listGroups();
-  console.log('listGroups ===>', groups);
+  // const groups = await admin.listGroups();
+  // console.log('listGroups ===>', groups);
 
   // GET CONSUMER LIST
   // gets us array of groups, for each group we can drill down to its members
   // maybe look into 'State: 'Stable' property in the group object
   // get us consumers for each group
-  const consumers = await admin.describeGroups(['test-group']);
-  console.log('consumer group ===>', consumers);
-  console.log('members of a group ===>', consumers.groups[0].members);
+  // const consumers = await admin.describeGroups(['test-group']);
+  // console.log('consumer group ===>', consumers);
+  // console.log('members of a group ===>', consumers.groups[0].members);
 
   // disconnect
   await admin.disconnect();

@@ -45,24 +45,25 @@ const kafka = new Kafka({
 
 // to verify that messages are being sent to the kafka broker, create a consumer to
 const consumer = kafka.consumer({ groupId: 'test-group' });
-const consumer2 = kafka.consumer({ groupId: 'test-group' });
+const consumer2 = kafka.consumer({ groupId: 'tech-jobs' });
 
 const consume = async () => {
   console.log('consumer connecting...');
   await consumer.connect();
   console.log('consumer connected!');
 
-  // await consumer2.connect();
-  // console.log('consumer2 connected!');
+  console.log('consumer2 connecting...');
+  await consumer2.connect();
+  console.log('consumer2 connected...');
 
   await consumer.subscribe({
     topic: 'TRUCK_ENGINE_SENSORS',
     fromBeginning: true,
   });
-  // await consumer2.subscribe({
-  //   topic: 'TRUCK_ENGINE_SENSORS',
-  //   fromBeginning: true,
-  // });
+  await consumer2.subscribe({
+    topic: 'TRUCK_ENGINE_SENSORS',
+    fromBeginning: true,
+  });
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
