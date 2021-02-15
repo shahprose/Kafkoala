@@ -1,3 +1,6 @@
+server/settings.js
+build/
+
 # Logs
 logs
 *.log
@@ -103,5 +106,4 @@ dist
 # TernJS port file
 .tern-port
 
-.package_lock.json
-package_lock.json
+.DS_Store

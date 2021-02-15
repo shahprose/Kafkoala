@@ -1,0 +1,9 @@
+@import 'palette';
+
+// setting variables for reference
+$background: $offwhite;
+
+body {
+  background: $background;
+  background-size: cover;
+}
