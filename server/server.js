@@ -1,14 +1,6 @@
 const path = require('path');
 const express = require('express');
-// const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
-// const configControllers = require('./controllers/configControllers');
-// const userControllers = require('./controllers/userControllers');
-// const oauthController = require('./controllers/oauthController');
-// const sessionController = require('./controllers/sessionController');
-// const secretCookieController = require('./controllers/secretCookieController');
-// const { Redirect } = require('react-router-dom');
 
 const PORT = 3000;
 
@@ -28,120 +20,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/shared/*', (req, res) => {
-  // when loading paths for shared configs, send root document and let react
-  // router handle parsing the url during development, webpack dev server
-  // reroutes all 404 pages to root due to historyApiFallback option, so this is
-  // unnecessary
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-// // retrieve configs saved by user
-// app.get(
-//   '/api/user/savedconfigs',
-//   secretCookieController.decryptCookie,
-//   sessionController.verifySession,
-//   // userControllers.ensureSignedIn,
-//   userControllers.getConfigs,
-//   (req, res) => {
-//     return res.json({ configs: res.locals.userConfigs });
-//   }
-// );
-
-// // remove config from user saved configs
-// app.delete(
-//   '/api/user/config',
-//   secretCookieController.decryptCookie,
-//   sessionController.verifySession,
-//   userControllers.ensureSignedIn,
-//   userControllers.removeConfig,
-//   (req, res) => {
-//     return res.sendStatus(200);
-//   }
-// );
-
-// // save configuration to database
-// app.post(
-//   '/api/user/config',
-//   secretCookieController.decryptCookie,
-//   sessionController.verifySession,
-//   userControllers.ensureSignedIn,
-//   configControllers.saveConfig,
-//   userControllers.addConfig,
-//   (req, res) => {
-//     return res.json({ configId: res.locals.configId });
-//   }
-// );
-
-// // retrieve specific configuration from database
-// app.get('/api/config/:id', configControllers.getConfig, (req, res) => {
-//   if (!res.locals.config) return res.sendStatus(404);
-
-//   return res.json({ eslintrc: res.locals.config });
-// });
-
-// // retrieve shared config
-// app.get(
-//   '/api/config/share/:id',
-//   configControllers.getSharedConfig,
-//   (req, res) => {
-//     if (!res.locals.config) return res.sendStatus(410);
-
-//     return res.json({ eslintrc: res.locals.config });
-//   }
-// );
-
-// // save shared config and return id for sharing
-// app.post('/api/config/share', configControllers.shareConfig, (req, res) => {
-//   return res.json({ endpoint: `shared/${res.locals.shareId}` });
-// });
-
-// // oAuth callback route
-// // to test, turn on server (in terminal type "node server/server.js") and go to
-// // https://github.com/login/oauth/authorize?client_id=<Your Github OAuth Client ID here>
-// app.get(
-//   '/api/user/signin/callback',
-//   oauthController.githubAuth,
-//   oauthController.getGithubUserInfo,
-//   sessionController.createSession,
-//   secretCookieController.setEncryptedCookie,
-//   (req, res) => {
-//     if (process.env.NODE_ENV === 'production') return res.redirect('/');
-//     // if on development, redirect to webpack server at 8080
-//     return res.redirect('http://localhost:8080');
-//   }
-// );
-
-// // used only for testing purposes. To test, first go through the oAuth callback route
-// // after that, go to http://localhost:3000/api/user/testdecryptcookie
-// /*
-// app.get('/api/user/testdecryptcookie',
-//   secretCookieController.decryptCookie,
-//   sessionController.verifySession,
-//   (req, res) => {
-//     return res.status(200).send('<h1>Decrypted Cookie and Verified Session</h1>');
-//   }
-// );
-// */
-
-// // used only for testing purposes. To test, first go through the oAuth callback route
-// // after that, go to Postman and make a POST request to http://localhost:3000/api/user/testjwt
-// // in the 'Headers' input a Key called "Authorization" and set the value to
-// // 'Bearer <Your bToken here>'
-// /*
-// app.post('/api/user/testjwt',
-//   sessionController.verifySession,
-//   (req, res) => {
-//     return res.status(200).send('<h1>Verified Session</h1>');
-//   }
-// )
-// */
-
-// app.use('/api/user/signin', oauthController.loginToGithub, (req, res) => {
-//   return res.redirect(res.locals.redirectURL);
-// });
-
 app.listen(PORT, () => {
-  console.log(`it's going down at: ${PORT}`);
+  console.log(`Listening on Port: ${PORT}`);
 });
 
 app.use((err, req, res, next) => {
